@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>모닝 브리핑</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: #0f1117; color: #e8eaf0; font-family: 'Apple SD Gothic Neo', 'Pretendard', sans-serif; padding: 24px 16px; }
+    .header { margin-bottom: 24px; }
+    .header .date { font-size: 12px; color: #666; margin-bottom: 4px; }
+    .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+    .header p { font-size: 13px; color: #666; margin-top: 4px; }
+    .btn-main { background: #5b6aff; color: white; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
+    .btn-main:hover { background: #4a59ee; }
+    .btn-main:disabled { background: #3a3d50; cursor: not-allowed; color: #666; }
+    .card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; }
+    .card-header:hover { background: #1e2130; }
+    .card-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #2a2d3a; color: #9ca3b0; }
+    .badge.done { background: #1e2f1e; color: #6dbf6d; }
+    .badge.loading-badge { background: #1e1e30; color: #7a8aff; }
+    .card-body { padding: 14px 18px 16px; border-top: 1px solid #2a2d3a; display: none; }
+    .card-body.open { display: block; }
+    .news-item { padding: 8px 0; border-bottom: 1px solid #22253a; }
+    .news-item:last-child { border-bottom: none; }
+    .news-title { font-weight: 600; color: #a0aaff; font-size: 14px; display: block; }
+    .news-body { color: #9ca3b0; font-size: 13.5px; line-height: 1.6; }
+    .btn-refresh { background: transparent; border: 1px solid #3a3d50; color: #9ca3b0; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-left: 8px; }
+    .btn-refresh:hover { border-color: #5b6aff; color: #a0aaff; }
+    .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid #3a3d50; border-top-color: #5b6aff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 4px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date" id="dateStr"></div>
+  <h1>모닝 브리핑</h1>
+  <p>하루를 시작하기 전 필요한 것만</p>
+</div>
+
+<button class="btn-main" id="btnAll" onclick="fetchAll()">오늘 브리핑 받기</button>
+
+<div id="sections"></div>
+
+<script>
+const SECTIONS = [
+  { key: "weather",     label: "날씨",        icon: "🌤️" },
+  { key: "korea",       label: "국내 뉴스",    icon: "🇰🇷" },
+  { key: "world",       label: "세계 뉴스",    icon: "🌍" },
+  { key: "ai",          label: "AI 뉴스",      icon: "🤖" },
+  { key: "ligachem",    label: "리가켐바이오", icon: "💊" },
+  { key: "realestate",  label: "부동산",       icon: "🏢" },
+];
+
+const PROMPTS = {
+  weather:     "서울의 오늘 날씨를 브리핑해줘. 현재 기온, 체감온도, 날씨 상태, 오늘 최고/최저 기온, 주의사항(미세먼지, 비 등)을 포함해서 3-4문장으로 간결하게. 숫자와 팩트 위주로.",
+  korea:       "오늘 대한민국 주요 뉴스 3개를 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 가장 중요한 뉴스 순서로.",
+  world:       "오늘 세계 주요 뉴스 3개를 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 가장 중요한 뉴스 순서로.",
+  ai:          "오늘 AI(인공지능) 관련 주요 뉴스를 최대 3개 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 없으면 '오늘 특이 사항 없음'으로.",
+  ligachem:    "오늘 리가켐바이오(LigaChem Biosciences) 관련 최신 뉴스나 공시, 주가 관련 정보를 브리핑해줘. 없으면 최근 1주일 내 주요 소식으로. 2-3문장으로 간결하게.",
+  realestate:  "오늘 대한민국 부동산 관련 주요 뉴스 2-3개를 브리핑해줘. 정책, 시장 동향, 재건축/재개발 이슈 중심으로. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로.",
+};
+
+const state = {};
+
+// 날짜 표시
+const now = new Date();
+document.getElementById("dateStr").textContent =
+  now.toLocaleDateString("ko-KR", { year:"numeric", month:"long", day:"numeric", weekday:"long" }) +
+  " · " + now.toLocaleTimeString("ko-KR", { hour:"2-digit", minute:"2-digit" });
+
+// 카드 렌더링
+const container = document.getElementById("sections");
+SECTIONS.forEach(({ key, label, icon }) => {
+  container.innerHTML += `
+    <div class="card" id="card-${key}">
+      <div class="card-header" onclick="toggleCard('${key}')">
+        <div class="card-title"><span>${icon}</span><span>${label}</span></div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="badge" id="badge-${key}">클릭해서 불러오기</span>
+          <button class="btn-refresh" id="refresh-${key}" style="display:none" onclick="event.stopPropagation();fetchSection('${key}')">새로고침</button>
+        </div>
+      </div>
+      <div class="card-body" id="body-${key}"></div>
+    </div>`;
+});
+
+function toggleCard(key) {
+  if (!state[key]) { fetchSection(key); return; }
+  const body = document.getElementById("body-" + key);
+  body.classList.toggle("open");
+}
+
+function renderContent(text) {
+  return text.split("\n").filter(l => l.trim()).map(line => {
+    const m = line.match(/^\[(.+?)\]\s*[-–]?\s*(.*)/);
+    if (m) return `<div class="news-item"><span class="news-title">${m[1]}</span><span class="news-body"> — ${m[2]}</span></div>`;
+    const cleaned = line.replace(/^[-•*\d.]+\s*/, "");
+    if (cleaned !== line || /^[-•*]/.test(line.trim())) return `<div class="news-item"><span class="news-body">${cleaned}</span></div>`;
+    return `<p class="news-body" style="margin:6px 0">${line}</p>`;
+  }).join("");
+}
+
+async function fetchSection(key) {
+  const badge = document.getElementById("badge-" + key);
+  const body = document.getElementById("body-" + key);
+  const refresh = document.getElementById("refresh-" + key);
+  badge.className = "badge loading-badge";
+  badge.innerHTML = `<span class="loader"></span>로딩 중`;
+  body.classList.remove("open");
+  refresh.style.display = "none";
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{ role: "user", content: PROMPTS[key] }],
+      }),
+    });
+    const d = await res.json();
+    const text = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("\n") || "정보를 가져오지 못했어요.";
+    state[key] = text;
+    body.innerHTML = renderContent(text);
+    body.classList.add("open");
+    badge.className = "badge done";
+    badge.textContent = "완료";
+    refresh.style.display = "inline-block";
+  } catch {
+    body.innerHTML = `<p class="news-body">오류가 발생했어요. 다시 시도해 주세요.</p>`;
+    body.classList.add("open");
+    badge.className = "badge";
+    badge.textContent = "오류";
+  }
+}
+
+async function fetchAll() {
+  const btn = document.getElementById("btnAll");
+  btn.disabled = true;
+  btn.textContent = "브리핑 수신 중...";
+  await Promise.all(SECTIONS.map(s => fetchSection(s.key)));
+  btn.disabled = false;
+  btn.textContent = "새로고침";
+}
+</script>
+</body>
+</html>
