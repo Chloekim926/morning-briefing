@@ -1,152 +1,201 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>모닝 브리핑</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: #0f1117; color: #e8eaf0; font-family: 'Apple SD Gothic Neo', 'Pretendard', sans-serif; padding: 24px 16px; }
-    .header { margin-bottom: 24px; }
-    .header .date { font-size: 12px; color: #666; margin-bottom: 4px; }
-    .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-    .header p { font-size: 13px; color: #666; margin-top: 4px; }
-    .btn-main { background: #5b6aff; color: white; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
-    .btn-main:hover { background: #4a59ee; }
-    .btn-main:disabled { background: #3a3d50; cursor: not-allowed; color: #666; }
-    .card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
-    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; }
-    .card-header:hover { background: #1e2130; }
-    .card-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #2a2d3a; color: #9ca3b0; }
-    .badge.done { background: #1e2f1e; color: #6dbf6d; }
-    .badge.loading-badge { background: #1e1e30; color: #7a8aff; }
-    .card-body { padding: 14px 18px 16px; border-top: 1px solid #2a2d3a; display: none; }
-    .card-body.open { display: block; }
-    .news-item { padding: 8px 0; border-bottom: 1px solid #22253a; }
-    .news-item:last-child { border-bottom: none; }
-    .news-title { font-weight: 600; color: #a0aaff; font-size: 14px; display: block; }
-    .news-body { color: #9ca3b0; font-size: 13.5px; line-height: 1.6; }
-    .btn-refresh { background: transparent; border: 1px solid #3a3d50; color: #9ca3b0; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; margin-left: 8px; }
-    .btn-refresh:hover { border-color: #5b6aff; color: #a0aaff; }
-    .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid #3a3d50; border-top-color: #5b6aff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 4px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:#f5f6fa;color:#1a1a2e;font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;padding:28px 18px}
+    .header{margin-bottom:28px;border-bottom:2px solid #e8eaf0;padding-bottom:18px}
+    .date{font-size:12px;color:#888;margin-bottom:6px;font-weight:500;letter-spacing:0.3px}
+    h1{font-size:26px;font-weight:800;letter-spacing:-0.8px;color:#1a1a2e}
+    .subtitle{font-size:13px;color:#aaa;margin-top:5px}
+    .btn-main{background:#2d3aff;color:#fff;border:none;padding:13px 30px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:22px;box-shadow:0 4px 14px rgba(45,58,255,0.2);transition:all 0.2s}
+    .btn-main:hover{background:#1e2be0;box-shadow:0 6px 18px rgba(45,58,255,0.3)}
+    .btn-main:disabled{background:#c5c9e0;box-shadow:none;cursor:not-allowed;color:#fff}
+    .card{background:#fff;border:1px solid #e8eaf0;border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:box-shadow 0.2s}
+    .card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;cursor:pointer;user-select:none}
+    .card-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;color:#1a1a2e}
+    .badge{font-size:11px;padding:3px 9px;border-radius:20px;background:#f0f1f8;color:#888;font-weight:500}
+    .badge.done{background:#e8f5e9;color:#43a047}
+    .badge.loading-badge{background:#eef0ff;color:#2d3aff}
+    .badge.err{background:#fdecea;color:#e53935}
+    .card-body{padding:14px 18px 18px;border-top:1px solid #f0f1f8;display:none}
+    .card-body.open{display:block}
+    .news-item{padding:10px 0;border-bottom:1px solid #f5f6fa}
+    .news-item:last-child{border-bottom:none}
+    .news-title{font-weight:700;color:#2d3aff;font-size:14px;display:block;margin-bottom:3px;text-decoration:none}
+    .news-title:hover{text-decoration:underline}
+    .news-body{color:#555;font-size:13px;line-height:1.65}
+    .news-meta{font-size:11px;color:#bbb;margin-top:4px}
+    .weather-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .weather-item{background:#f5f6fa;border-radius:10px;padding:12px 14px}
+    .weather-label{font-size:11px;color:#aaa;font-weight:600;margin-bottom:3px}
+    .weather-value{font-size:20px;font-weight:800;color:#1a1a2e}
+    .weather-unit{font-size:13px;color:#888;font-weight:500}
+    .weather-desc{color:#555;font-size:13px;line-height:1.7;margin-top:8px}
+    .btn-refresh{background:transparent;border:1px solid #e0e2ee;color:#aaa;padding:4px 10px;border-radius:7px;font-size:11px;cursor:pointer;margin-left:6px;transition:all 0.15s}
+    .btn-refresh:hover{border-color:#2d3aff;color:#2d3aff}
+    .loader{display:inline-block;width:11px;height:11px;border:2px solid #dde;border-top-color:#2d3aff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:4px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .chevron{font-size:11px;color:#ccc;transition:transform 0.2s}
+    .chevron.open{transform:rotate(180deg)}
+    .loading-placeholder{color:#bbb;font-size:13px;padding:8px 0}
   </style>
 </head>
 <body>
-
 <div class="header">
   <div class="date" id="dateStr"></div>
   <h1>모닝 브리핑</h1>
-  <p>하루를 시작하기 전 필요한 것만</p>
+  <p class="subtitle">하루를 시작하기 전 필요한 것만</p>
 </div>
 
 <button class="btn-main" id="btnAll" onclick="fetchAll()">오늘 브리핑 받기</button>
-
 <div id="sections"></div>
 
 <script>
-const SECTIONS = [
-  { key: "weather",     label: "날씨",        icon: "🌤️" },
-  { key: "korea",       label: "국내 뉴스",    icon: "🇰🇷" },
-  { key: "world",       label: "세계 뉴스",    icon: "🌍" },
-  { key: "ai",          label: "AI 뉴스",      icon: "🤖" },
-  { key: "ligachem",    label: "리가켐바이오", icon: "💊" },
-  { key: "realestate",  label: "부동산",       icon: "🏢" },
+const SECTIONS=[
+  {key:"weather",  label:"날씨",       icon:"🌤️"},
+  {key:"korea",    label:"국내 뉴스",   icon:"🇰🇷"},
+  {key:"world",    label:"세계 뉴스",   icon:"🌍"},
+  {key:"ai",       label:"AI 뉴스",     icon:"🤖"},
+  {key:"ligachem", label:"리가켐바이오",icon:"💊"},
+  {key:"realestate",label:"부동산",     icon:"🏢"},
 ];
 
-const PROMPTS = {
-  weather:     "서울의 오늘 날씨를 브리핑해줘. 현재 기온, 체감온도, 날씨 상태, 오늘 최고/최저 기온, 주의사항(미세먼지, 비 등)을 포함해서 3-4문장으로 간결하게. 숫자와 팩트 위주로.",
-  korea:       "오늘 대한민국 주요 뉴스 3개를 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 가장 중요한 뉴스 순서로.",
-  world:       "오늘 세계 주요 뉴스 3개를 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 가장 중요한 뉴스 순서로.",
-  ai:          "오늘 AI(인공지능) 관련 주요 뉴스를 최대 3개 브리핑해줘. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로. 없으면 '오늘 특이 사항 없음'으로.",
-  ligachem:    "오늘 리가켐바이오(LigaChem Biosciences) 관련 최신 뉴스나 공시, 주가 관련 정보를 브리핑해줘. 없으면 최근 1주일 내 주요 소식으로. 2-3문장으로 간결하게.",
-  realestate:  "오늘 대한민국 부동산 관련 주요 뉴스 2-3개를 브리핑해줘. 정책, 시장 동향, 재건축/재개발 이슈 중심으로. 각 뉴스는 [제목] - 핵심 내용 1-2문장 형식으로.",
+const RSS={
+  korea:    "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko",
+  world:    "https://news.google.com/rss/headlines/section/topic/WORLD?hl=ko&gl=KR&ceid=KR:ko",
+  ai:       "https://news.google.com/rss/search?q=인공지능+AI+ChatGPT&hl=ko&gl=KR&ceid=KR:ko",
+  ligachem: "https://news.google.com/rss/search?q=리가켐바이오&hl=ko&gl=KR&ceid=KR:ko",
+  realestate:"https://news.google.com/rss/search?q=부동산+재건축+재개발&hl=ko&gl=KR&ceid=KR:ko",
 };
 
-const state = {};
+const RSS2JSON="https://api.rss2json.com/v1/api.json?rss_url=";
+const state={};
 
-// 날짜 표시
-const now = new Date();
-document.getElementById("dateStr").textContent =
-  now.toLocaleDateString("ko-KR", { year:"numeric", month:"long", day:"numeric", weekday:"long" }) +
-  " · " + now.toLocaleTimeString("ko-KR", { hour:"2-digit", minute:"2-digit" });
+// 날짜
+const now=new Date();
+document.getElementById("dateStr").textContent=
+  now.toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"})+" · "+
+  now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
 
-// 카드 렌더링
-const container = document.getElementById("sections");
-SECTIONS.forEach(({ key, label, icon }) => {
-  container.innerHTML += `
-    <div class="card" id="card-${key}">
-      <div class="card-header" onclick="toggleCard('${key}')">
-        <div class="card-title"><span>${icon}</span><span>${label}</span></div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="badge" id="badge-${key}">클릭해서 불러오기</span>
-          <button class="btn-refresh" id="refresh-${key}" style="display:none" onclick="event.stopPropagation();fetchSection('${key}')">새로고침</button>
-        </div>
+// 카드 생성
+const container=document.getElementById("sections");
+SECTIONS.forEach(({key,label,icon})=>{
+  const d=document.createElement("div");
+  d.className="card"; d.id="card-"+key;
+  d.innerHTML=`
+    <div class="card-header" id="hdr-${key}" onclick="toggleCard('${key}')">
+      <div class="card-title"><span>${icon}</span><span>${label}</span></div>
+      <div style="display:flex;align-items:center;gap:5px">
+        <span class="badge" id="badge-${key}">클릭해서 불러오기</span>
+        <button class="btn-refresh" id="ref-${key}" style="display:none" onclick="event.stopPropagation();fetchSection('${key}')">새로고침</button>
+        <span class="chevron" id="chev-${key}">▾</span>
       </div>
-      <div class="card-body" id="body-${key}"></div>
-    </div>`;
+    </div>
+    <div class="card-body" id="body-${key}"></div>`;
+  container.appendChild(d);
 });
 
-function toggleCard(key) {
-  if (!state[key]) { fetchSection(key); return; }
-  const body = document.getElementById("body-" + key);
-  body.classList.toggle("open");
+function toggleCard(key){
+  if(!state[key]){fetchSection(key);return;}
+  const body=document.getElementById("body-"+key);
+  const chev=document.getElementById("chev-"+key);
+  const open=body.classList.toggle("open");
+  chev.classList.toggle("open",open);
 }
 
-function renderContent(text) {
-  return text.split("\n").filter(l => l.trim()).map(line => {
-    const m = line.match(/^\[(.+?)\]\s*[-–]?\s*(.*)/);
-    if (m) return `<div class="news-item"><span class="news-title">${m[1]}</span><span class="news-body"> — ${m[2]}</span></div>`;
-    const cleaned = line.replace(/^[-•*\d.]+\s*/, "");
-    if (cleaned !== line || /^[-•*]/.test(line.trim())) return `<div class="news-item"><span class="news-body">${cleaned}</span></div>`;
-    return `<p class="news-body" style="margin:6px 0">${line}</p>`;
-  }).join("");
+// 날씨 (Open-Meteo, Seoul)
+async function fetchWeather(){
+  setBadge("weather","loading");
+  try{
+    const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FSeoul&forecast_days=1");
+    const d=await r.json();
+    const c=d.current, dl=d.daily;
+    const WMO={0:"맑음",1:"대체로 맑음",2:"구름 많음",3:"흐림",45:"안개",48:"안개",51:"이슬비",53:"이슬비",55:"이슬비",61:"비",63:"비",65:"강한 비",71:"눈",73:"눈",75:"강한 눈",80:"소나기",81:"소나기",82:"강한 소나기",95:"뇌우",96:"뇌우",99:"강한 뇌우"};
+    const desc=WMO[c.weather_code]||"알 수 없음";
+    const rainProb=dl.precipitation_probability_max[0];
+    const html=`
+      <div class="weather-box">
+        <div class="weather-item"><div class="weather-label">현재 기온</div><div class="weather-value">${c.temperature_2m}<span class="weather-unit">°C</span></div></div>
+        <div class="weather-item"><div class="weather-label">체감온도</div><div class="weather-value">${c.apparent_temperature}<span class="weather-unit">°C</span></div></div>
+        <div class="weather-item"><div class="weather-label">최고/최저</div><div class="weather-value" style="font-size:16px">${dl.temperature_2m_max[0]}° / ${dl.temperature_2m_min[0]}°</div></div>
+        <div class="weather-item"><div class="weather-label">강수 확률</div><div class="weather-value">${rainProb}<span class="weather-unit">%</span></div></div>
+      </div>
+      <p class="weather-desc">날씨 상태: <strong>${desc}</strong> · 풍속 ${c.wind_speed_10m} km/h${rainProb>50?" · 우산 챙기세요 ☂️":""}</p>`;
+    setBody("weather",html);
+  }catch{setError("weather");}
 }
 
-async function fetchSection(key) {
-  const badge = document.getElementById("badge-" + key);
-  const body = document.getElementById("body-" + key);
-  const refresh = document.getElementById("refresh-" + key);
-  badge.className = "badge loading-badge";
-  badge.innerHTML = `<span class="loader"></span>로딩 중`;
-  body.classList.remove("open");
-  refresh.style.display = "none";
-
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
-        messages: [{ role: "user", content: PROMPTS[key] }],
-      }),
-    });
-    const d = await res.json();
-    const text = (d.content || []).filter(b => b.type === "text").map(b => b.text).join("\n") || "정보를 가져오지 못했어요.";
-    state[key] = text;
-    body.innerHTML = renderContent(text);
-    body.classList.add("open");
-    badge.className = "badge done";
-    badge.textContent = "완료";
-    refresh.style.display = "inline-block";
-  } catch {
-    body.innerHTML = `<p class="news-body">오류가 발생했어요. 다시 시도해 주세요.</p>`;
-    body.classList.add("open");
-    badge.className = "badge";
-    badge.textContent = "오류";
-  }
+// 뉴스 RSS
+async function fetchNews(key,maxItems=3){
+  setBadge(key,"loading");
+  try{
+    const url=RSS2JSON+encodeURIComponent(RSS[key])+"&count="+maxItems;
+    const r=await fetch(url);
+    const d=await r.json();
+    if(!d.items||d.items.length===0){setBody(key,"<p class='news-body'>관련 뉴스가 없어요.</p>");setBadge(key,"done");return;}
+    const html=d.items.slice(0,maxItems).map(item=>{
+      const title=item.title.replace(/ - .*$/,"").trim();
+      const src=item.title.match(/ - (.+)$/)?.[1]||"";
+      const date=item.pubDate?new Date(item.pubDate).toLocaleDateString("ko-KR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"";
+      return `<div class="news-item">
+        <a class="news-title" href="${item.link}" target="_blank">${title}</a>
+        <div class="news-meta">${src}${date?" · "+date:""}</div>
+      </div>`;
+    }).join("");
+    setBody(key,html);
+  }catch{setError(key);}
 }
 
-async function fetchAll() {
-  const btn = document.getElementById("btnAll");
-  btn.disabled = true;
-  btn.textContent = "브리핑 수신 중...";
-  await Promise.all(SECTIONS.map(s => fetchSection(s.key)));
-  btn.disabled = false;
-  btn.textContent = "새로고침";
+function setBadge(key,type){
+  const b=document.getElementById("badge-"+key);
+  if(type==="loading"){b.className="badge loading-badge";b.innerHTML=`<span class="loader"></span>로딩 중`;}
+  else if(type==="done"){b.className="badge done";b.textContent="완료";}
+  else{b.className="badge err";b.textContent="오류";}
+  document.getElementById("body-"+key).classList.remove("open");
+  document.getElementById("chev-"+key).classList.remove("open");
+}
+
+function setBody(key,html){
+  const body=document.getElementById("body-"+key);
+  body.innerHTML=html;
+  body.classList.add("open");
+  document.getElementById("chev-"+key).classList.add("open");
+  document.getElementById("ref-"+key).style.display="inline-block";
+  setBadgeOnly(key,"done");
+  state[key]=true;
+}
+
+function setBadgeOnly(key,type){
+  const b=document.getElementById("badge-"+key);
+  if(type==="done"){b.className="badge done";b.textContent="완료";}
+}
+
+function setError(key){
+  const body=document.getElementById("body-"+key);
+  body.innerHTML="<p class='news-body' style='color:#e53935'>불러오기 실패. 새로고침 해보세요.</p>";
+  body.classList.add("open");
+  const b=document.getElementById("badge-"+key);
+  b.className="badge err";b.textContent="오류";
+  document.getElementById("ref-"+key).style.display="inline-block";
+}
+
+async function fetchSection(key){
+  setBadge(key,"loading");
+  document.getElementById("ref-"+key).style.display="none";
+  if(key==="weather") await fetchWeather();
+  else await fetchNews(key, key==="ligachem"?3:3);
+}
+
+async function fetchAll(){
+  const btn=document.getElementById("btnAll");
+  btn.disabled=true;btn.textContent="브리핑 수신 중...";
+  await Promise.all(SECTIONS.map(s=>fetchSection(s.key)));
+  btn.disabled=false;btn.textContent="새로고침";
 }
 </script>
 </body>
