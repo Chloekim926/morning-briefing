@@ -5,136 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>모닝 브리핑</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg1:#ffffff;--bg2:#f4f6ff;--bg3:#eef1ff;
-      --card:#ffffff;--card2:#f8f9ff;--card3:#f0f3ff;
-      --border:#e0e5f0;--border2:#c8d0f0;
-      --blue:#1e6fff;--blue2:#3d8bff;--blue3:#6aabff;
-      --accent:#1e6fff;
-      --text:#0a0f1e;--text2:#3a4a6a;--text3:#5a6a8a;--text4:#8896b8;
+      --bg:#f0f2f5;
+      --card:#ffffff;
+      --blue:#1565ef;--blue2:#2979ff;--blue-light:#e8f0fe;
+      --text:#0d1117;--text2:#3d4654;--text3:#6b7685;--text4:#a0aab4;
+      --border:#e8ebf0;
+      --radius:20px;
+      --shadow:0 2px 16px rgba(0,0,0,0.06);
     }
-    body{min-height:100vh;background:#f4f6ff;color:var(--text);font-family:'Inter',sans-serif;padding:0 0 60px;overflow-x:hidden}
+    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding:0;overflow-x:hidden;max-width:100%;-webkit-font-smoothing:antialiased}
 
     /* ── HEADER ── */
-    .header{padding:52px 28px 36px;position:relative;overflow:hidden;background:linear-gradient(135deg,#1e6fff 0%,#3d8bff 60%,#6aabff 100%)}
-    .header::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,#ffffff18 0%,transparent 70%);pointer-events:none}
-    .header::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,#ffffff0d 0%,transparent 70%);pointer-events:none}
-    .header-time{font-size:52px;font-weight:200;color:#fff;letter-spacing:-2px;line-height:1.1;margin-bottom:6px}
-    .header-date{font-size:18px;font-weight:300;color:#ffffffcc;letter-spacing:0.5px;margin-bottom:6px}
-    .header-sub{font-size:13px;color:#ffffff88;font-weight:300;margin-bottom:24px}
-
-    /* ── BTN ── */
-    .btn-main{background:#fff;color:#1e6fff;border:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 32px #00000018;transition:all 0.2s;letter-spacing:0.2px;display:inline-flex;align-items:center;gap:8px}
-    .btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 40px #00000028}
-    .btn-main:disabled{background:#e8eaf0;box-shadow:none;cursor:not-allowed;transform:none;color:#aab}
-    .btn-pulse{width:8px;height:8px;border-radius:50%;background:#1e6fff;animation:pulse 1.4s infinite}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+    .header{padding:48px 24px 40px;position:relative;overflow:hidden;background:var(--blue);border-radius:0 0 32px 32px}
+    .header::before{content:'';position:absolute;top:-100px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,#ffffff12 0%,transparent 70%);pointer-events:none}
+    .header-time{font-size:56px;font-weight:800;color:#fff;letter-spacing:-2.5px;line-height:1;margin-bottom:10px}
+    .header-date{font-size:16px;font-weight:400;color:#ffffffaa;letter-spacing:0.2px;margin-bottom:28px}
+    .btn-main{background:#fff;color:var(--blue);border:none;padding:16px 28px;border-radius:16px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:all 0.2s;display:inline-flex;align-items:center;gap:10px}
+    .btn-main:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(0,0,0,0.2)}
+    .btn-main:disabled{background:#ffffff44;box-shadow:none;cursor:not-allowed;transform:none;color:#fff}
+    .btn-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);animation:pulse 1.4s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
 
     /* ── SECTION ── */
-    .section{padding:0 18px;margin-bottom:8px}
-    .sec-label{font-size:10px;font-weight:600;color:var(--text4);letter-spacing:1.2px;text-transform:uppercase;padding:20px 6px 10px;display:flex;align-items:center;gap:8px}
-    .sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+    .section{padding:0 16px;margin-top:16px}
+    .sec-header{display:flex;align-items:center;justify-content:space-between;padding:0 6px;margin-bottom:12px}
+    .sec-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+    .sec-sub{font-size:12px;color:var(--text4);font-weight:500}
 
-    /* ── GLASS CARD ── */
-    .glass{background:var(--card);border:1px solid var(--border);border-radius:22px;overflow:hidden;position:relative}
+    /* ── CARD ── */
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:relative}
+
+    /* ── STATUS ── */
+    .status-bar{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border)}
+    .badge{font-size:11px;padding:4px 12px;border-radius:10px;font-weight:600}
+    .badge.wait{background:#f5f6f8;color:var(--text4)}
+    .badge.loading-badge{background:var(--blue-light);color:var(--blue)}
+    .badge.done{background:#e8f5e9;color:#2e7d32}
+    .badge.err{background:#fce4ec;color:#c62828}
+    .btn-ref{background:#f5f6f8;border:none;color:var(--text3);padding:6px 14px;border-radius:10px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:inherit}
+    .btn-ref:hover{background:var(--blue);color:#fff}
 
     /* ── WEATHER ── */
-    .weather-hero{padding:28px 28px 20px;display:flex;align-items:flex-start;justify-content:space-between}
-    .weather-icon{font-size:72px;line-height:1;filter:drop-shadow(0 0 20px #3d8bff44)}
-    .weather-info{text-align:right}
-    .temp-big{font-size:72px;font-weight:200;line-height:1;letter-spacing:-3px;color:var(--text)}
-    .temp-big span{font-size:36px;font-weight:300;color:var(--text3)}
-    .weather-desc{font-size:15px;color:var(--blue2);font-weight:400;margin-top:6px}
-    .weather-feels{font-size:12px;color:var(--text4);margin-top:3px;font-weight:300}
-    .weather-divider{height:1px;background:var(--border);margin:0 28px}
-    .weather-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:20px 28px;gap:0}
-    .weather-stats-row2{border-top:1px solid var(--border)}
-    .stat{text-align:center;padding:14px 0}
-    .stat+.stat{border-left:1px solid var(--border)}
-    .stat-label{font-size:10px;color:var(--text4);font-weight:500;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
-    .stat-value{font-size:28px;font-weight:200;color:var(--text);letter-spacing:-0.5px}
-    .stat-unit{font-size:12px;color:var(--text3);font-weight:300}
-    .weather-bar-wrap{padding:16px 28px 22px}
-    .bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text4);font-weight:400;margin-bottom:8px}
-    .bar-track{height:6px;background:#eef1ff;border-radius:99px;overflow:hidden}
-    .bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#6aabff,#3d8bff,#ff6b6b)}
-    .hourly-wrap{padding:0 28px 22px}
-    .hourly-label{font-size:10px;font-weight:500;color:var(--text4);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:14px}
+    .w-hero{padding:28px 24px 20px;display:flex;align-items:center;justify-content:space-between}
+    .w-icon{font-size:64px;line-height:1}
+    .w-right{text-align:right}
+    .w-temp{font-size:64px;font-weight:800;line-height:1;letter-spacing:-3px;color:var(--text)}
+    .w-temp span{font-size:28px;font-weight:500;color:var(--text3)}
+    .w-desc{font-size:14px;color:var(--blue);font-weight:600;margin-top:6px}
+    .w-feels{font-size:12px;color:var(--text4);margin-top:2px;font-weight:400}
 
-    /* ── STATUS ROW ── */
-    .status-row{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border)}
-    .badge{font-size:10px;padding:3px 10px;border-radius:99px;font-weight:600;border:1px solid}
-    .badge.wait{background:#f8f9ff;border-color:var(--border2);color:var(--text4)}
-    .badge.loading-badge{background:#1e6fff15;border-color:#3d8bff44;color:var(--blue2)}
-    .badge.done{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
-    .badge.err{background:#fce4ec;border-color:#ef9a9a;color:#c62828}
-    .btn-refresh{background:var(--card2);border:1px solid var(--border2);color:var(--blue2);padding:4px 12px;border-radius:99px;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;letter-spacing:0.3px}
-    .btn-refresh:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .w-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border)}
+    .w-stat{text-align:center;padding:20px 8px;position:relative}
+    .w-stat+.w-stat{border-left:1px solid var(--border)}
+    .w-stat-label{font-size:10px;color:var(--text4);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px}
+    .w-stat-val{font-size:32px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
+    .w-stat-unit{font-size:13px;font-weight:500;color:var(--text3)}
 
-    /* ── NEWS CARDS ── */
+    .w-bar-wrap{padding:16px 24px 20px;border-top:1px solid var(--border)}
+    .w-bar-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text4);font-weight:500;margin-bottom:8px}
+    .w-bar-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+    .w-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue2),#ff6b6b)}
+
+    .w-hourly{padding:4px 24px 24px;border-top:1px solid var(--border)}
+    .w-hourly-label{font-size:11px;font-weight:600;color:var(--text4);letter-spacing:0.5px;text-transform:uppercase;margin:16px 0 14px}
+
+    /* ── NEWS ── */
     .news-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
     @media(max-width:480px){.news-grid{grid-template-columns:1fr}}
-    .news-card{background:var(--card2);border:1px solid var(--border);border-radius:16px;overflow:hidden;text-decoration:none;display:block;color:inherit;transition:transform 0.2s,background 0.2s,box-shadow 0.2s;position:relative}
-    .news-card:hover{transform:translateY(-3px);background:var(--card3);box-shadow:0 12px 32px #0000000d}
-    .news-thumb{width:100%;height:88px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-    .thumb-favicon-img{width:44px;height:44px;border-radius:12px;object-fit:contain;filter:drop-shadow(0 2px 8px #00000022)}
-    .thumb-emoji-fallback{font-size:38px;filter:drop-shadow(0 2px 8px #00000011)}
-    .news-card-body{padding:11px 12px 13px}
-    .news-src{font-size:11px;color:var(--text3);font-weight:400;letter-spacing:0.3px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+    .news-card{background:#f8f9fb;border-radius:16px;overflow:hidden;text-decoration:none;display:block;color:inherit;transition:transform 0.2s,box-shadow 0.2s}
+    .news-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+    .news-thumb{width:100%;height:80px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .thumb-favicon-img{width:40px;height:40px;border-radius:10px;object-fit:contain}
+    .thumb-emoji-fallback{font-size:32px}
+    .news-body{padding:12px 14px 14px}
+    .news-src{font-size:11px;color:var(--text3);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:5px}
     .src-ico{width:14px;height:14px;border-radius:3px}
-    .news-title{font-size:14px;font-weight:400;color:var(--text);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:-0.2px}
-    .news-date{font-size:10px;color:var(--text4);margin-top:8px;font-weight:300}
+    .news-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:-0.2px}
+    .news-date{font-size:10px;color:var(--text4);margin-top:8px;font-weight:400}
 
-    /* ── PLACEHOLDER ── */
-    .placeholder{padding:36px 20px;text-align:center;color:var(--text4);font-size:12px;font-weight:400}
-
-    /* ── LOADER ── */
-    .loader{display:inline-block;width:10px;height:10px;border:2px solid #e0e5f0;border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:4px}
+    /* ── MISC ── */
+    .placeholder{padding:40px 20px;text-align:center;color:var(--text4);font-size:13px;font-weight:500}
+    .loader{display:inline-block;width:10px;height:10px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:4px}
     @keyframes spin{to{transform:rotate(360deg)}}
+    .spacer{height:40px}
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-time" id="timeStr"></div>
   <div class="header-date" id="dateStr"></div>
-  <div class="header-sub">오늘 하루도 브리핑으로 시작해요</div>
   <button class="btn-main" id="btnAll" onclick="fetchAll()" aria-label="브리핑 시작">
-    <span class="btn-pulse"></span>오늘 브리핑 받기
+    <span class="btn-dot"></span>오늘 브리핑 받기
   </button>
 </div>
 
 <!-- WEATHER -->
 <div class="section">
-  <div class="sec-label">오늘의 날씨</div>
-  <div class="glass">
-    <div class="status-row">
+  <div class="sec-header"><span class="sec-title">날씨</span><span class="sec-sub">서울</span></div>
+  <div class="card">
+    <div class="status-bar">
       <span class="badge wait" id="badge-weather">대기 중</span>
-      <button class="btn-refresh" id="ref-weather" style="display:none" onclick="fetchWeather()" aria-label="날씨 새로고침">새로고침</button>
+      <button class="btn-ref" id="ref-weather" style="display:none" onclick="fetchWeather()" aria-label="날씨 새로고침">새로고침</button>
     </div>
     <div id="weather-content"><div class="placeholder">브리핑을 누르면 날씨가 표시됩니다</div></div>
   </div>
 </div>
 
-<!-- NEWS -->
 <div id="news-sections"></div>
+<div class="spacer"></div>
 
 <script>
 const NEWS_SECTIONS=[
-  {key:"korea",     label:"국내 주요 뉴스",  icon:"",  emoji:"📰", grad:"linear-gradient(135deg,#eef2ff,#dde6ff)"},
-  {key:"world",     label:"세계 주요 뉴스",  icon:"",  emoji:"🌐", grad:"linear-gradient(135deg,#e8f0ff,#d4e4ff)"},
-  {key:"ai",        label:"AI 뉴스",         icon:"",  emoji:"🤖", grad:"linear-gradient(135deg,#eef1ff,#dce6ff)"},
-  {key:"ligachem",  label:"리가켐바이오",     icon:"",  emoji:"💊", grad:"linear-gradient(135deg,#eaedff,#d8e0ff)"},
-  {key:"realestate",label:"부동산",           icon:"",  emoji:"🏢", grad:"linear-gradient(135deg,#e8eeff,#d4dcff)"},
+  {key:"korea",label:"국내 주요 뉴스",emoji:"📰",grad:"linear-gradient(135deg,#eef2ff,#dde6ff)"},
+  {key:"world",label:"세계 주요 뉴스",emoji:"🌐",grad:"linear-gradient(135deg,#e8f0ff,#d4e4ff)"},
+  {key:"ai",label:"AI 뉴스",emoji:"🤖",grad:"linear-gradient(135deg,#eef1ff,#dce6ff)"},
+  {key:"ligachem",label:"리가켐바이오",emoji:"💊",grad:"linear-gradient(135deg,#eaedff,#d8e0ff)"},
+  {key:"realestate",label:"부동산",emoji:"🏢",grad:"linear-gradient(135deg,#e8eeff,#d4dcff)"},
 ];
 const RSS_URLS={
-  korea:    "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko",
-  world:    "https://news.google.com/rss/headlines/section/topic/WORLD?hl=ko&gl=KR&ceid=KR:ko",
-  ai:       "https://news.google.com/rss/search?q=AI+%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5+ChatGPT+LLM&hl=ko&gl=KR&ceid=KR:ko",
-  ligachem: "https://news.google.com/rss/search?q=%EB%A6%AC%EA%B0%80%EC%BC%90%EB%B0%94%EC%9D%B4%EC%98%A4&hl=ko&gl=KR&ceid=KR:ko",
+  korea:"https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko",
+  world:"https://news.google.com/rss/headlines/section/topic/WORLD?hl=ko&gl=KR&ceid=KR:ko",
+  ai:"https://news.google.com/rss/search?q=AI+%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5+ChatGPT+LLM&hl=ko&gl=KR&ceid=KR:ko",
+  ligachem:"https://news.google.com/rss/search?q=%EB%A6%AC%EA%B0%80%EC%BC%90%EB%B0%94%EC%9D%B4%EC%98%A4&hl=ko&gl=KR&ceid=KR:ko",
   realestate:"https://news.google.com/rss/search?q=%EB%B6%80%EB%8F%99%EC%82%B0+%EC%9E%AC%EA%B1%B4%EC%B6%95+%EC%9E%AC%EA%B0%9C%EB%B0%9C&hl=ko&gl=KR&ceid=KR:ko",
 };
 const PROXIES=[
@@ -142,38 +138,31 @@ const PROXIES=[
   u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
   u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
 ];
-const state={};
 
-/* ── Sanitize helper ── */
-function esc(str){const d=document.createElement("div");d.textContent=str;return d.innerHTML;}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
 
-/* ── Clock ── */
 function updateClock(){
-  const now=new Date();
-  document.getElementById("timeStr").textContent=now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
-  document.getElementById("dateStr").textContent=now.toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+  const n=new Date();
+  document.getElementById("timeStr").textContent=n.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false});
+  document.getElementById("dateStr").textContent=n.toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
 }
-updateClock();
-setInterval(updateClock,1000);
+updateClock();setInterval(updateClock,1000);
 
-/* ── Build news sections ── */
 const ns=document.getElementById("news-sections");
-NEWS_SECTIONS.forEach(({key,label,icon,emoji,grad})=>{
-  const d=document.createElement("div");
-  d.className="section";
+NEWS_SECTIONS.forEach(({key,label,emoji,grad})=>{
+  const d=document.createElement("div");d.className="section";
   d.innerHTML=`
-    <div class="sec-label">${esc(label)}</div>
-    <div class="glass">
-      <div class="status-row">
-        <span class="badge wait" id="badge-${esc(key)}">대기 중</span>
-        <button class="btn-refresh" id="ref-${esc(key)}" style="display:none" onclick="fetchNews('${esc(key)}','${esc(emoji)}','${grad}')" aria-label="${esc(label)} 새로고침">새로고침</button>
+    <div class="sec-header"><span class="sec-title">${esc(label)}</span></div>
+    <div class="card">
+      <div class="status-bar">
+        <span class="badge wait" id="badge-${key}">대기 중</span>
+        <button class="btn-ref" id="ref-${key}" style="display:none" onclick="fetchNews('${key}','${emoji}','${grad}')" aria-label="${esc(label)} 새로고침">새로고침</button>
       </div>
-      <div id="content-${esc(key)}"><div class="placeholder">브리핑을 누르면 뉴스가 표시됩니다</div></div>
+      <div id="content-${key}"><div class="placeholder">브리핑을 누르면 뉴스가 표시됩니다</div></div>
     </div>`;
   ns.appendChild(d);
 });
 
-/* ── WEATHER ── */
 async function fetchWeather(){
   setBadge("weather","loading");
   document.getElementById("ref-weather").style.display="none";
@@ -185,10 +174,8 @@ async function fetchWeather(){
     const c=cur.current,dl=cur.daily;
     const WMO={0:["맑음","☀️"],1:["대체로 맑음","🌤️"],2:["구름 많음","⛅"],3:["흐림","☁️"],45:["안개","🌫️"],48:["안개","🌫️"],51:["이슬비","🌦️"],53:["이슬비","🌦️"],61:["비","🌧️"],63:["비","🌧️"],65:["강한 비","⛈️"],71:["눈","🌨️"],75:["강한 눈","❄️"],80:["소나기","🌦️"],95:["뇌우","⛈️"]};
     const [desc,wIcon]=WMO[c.weather_code]||["알 수 없음","🌡️"];
-    const rain=dl.precipitation_probability_max[0];
-    const tMax=dl.temperature_2m_max[0],tMin=dl.temperature_2m_min[0];
+    const rain=dl.precipitation_probability_max[0],tMax=dl.temperature_2m_max[0],tMin=dl.temperature_2m_min[0];
     const fillPct=Math.max(4,Math.min(96,Math.round(((c.temperature_2m-tMin)/(tMax-tMin||1))*100)));
-
     const slots=[0,3,6,9,12,15,18,21];
     const temps=slots.map(h=>hourly.hourly.temperature_2m[h]??0);
     const mn=Math.min(...temps)-1,mx=Math.max(...temps)+1;
@@ -197,91 +184,75 @@ async function fetchWeather(){
     const pathD="M"+pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" L");
     const areaD=`M${pts[0].x.toFixed(1)},${H} L${pathD.slice(1)} L${pts[pts.length-1].x.toFixed(1)},${H} Z`;
     const labels=["0시","3시","6시","9시","12시","15시","18시","21시"];
-    const svgDots=pts.map((p,i)=>`
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="#fff" stroke="#1e6fff" stroke-width="1.8"/>
-      <text x="${p.x.toFixed(1)}" y="${(p.y-8).toFixed(1)}" text-anchor="middle" font-size="9" fill="#1e6fff" font-weight="600">${p.t}°</text>
-      <text x="${p.x.toFixed(1)}" y="${(H+13).toFixed(1)}" text-anchor="middle" font-size="8" fill="#8896b8">${labels[i]}</text>`).join("");
+    const dots=pts.map((p,i)=>`
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="#fff" stroke="#1565ef" stroke-width="2"/>
+      <text x="${p.x.toFixed(1)}" y="${(p.y-10).toFixed(1)}" text-anchor="middle" font-size="10" fill="#1565ef" font-weight="700">${p.t}°</text>
+      <text x="${p.x.toFixed(1)}" y="${(H+14).toFixed(1)}" text-anchor="middle" font-size="9" fill="#a0aab4" font-weight="500">${labels[i]}</text>`).join("");
 
     document.getElementById("weather-content").innerHTML=`
-      <div class="weather-hero">
-        <div class="weather-icon">${wIcon}</div>
-        <div class="weather-info">
-          <div class="temp-big">${c.temperature_2m}<span>°C</span></div>
-          <div class="weather-desc">${esc(desc)}</div>
-          <div class="weather-feels">체감 ${c.apparent_temperature}°C</div>
+      <div class="w-hero">
+        <div class="w-icon">${wIcon}</div>
+        <div class="w-right">
+          <div class="w-temp">${c.temperature_2m}<span>°C</span></div>
+          <div class="w-desc">${esc(desc)}</div>
+          <div class="w-feels">체감 ${c.apparent_temperature}°C</div>
         </div>
       </div>
-      <div class="weather-divider"></div>
-      <div class="weather-stats">
-        <div class="stat"><div class="stat-label">최고</div><div class="stat-value">${tMax}<span class="stat-unit">°</span></div></div>
-        <div class="stat"><div class="stat-label">최저</div><div class="stat-value">${tMin}<span class="stat-unit">°</span></div></div>
-        <div class="stat"><div class="stat-label">강수</div><div class="stat-value">${rain}<span class="stat-unit">%</span></div></div>
+      <div class="w-stats">
+        <div class="w-stat"><div class="w-stat-label">최고</div><div class="w-stat-val">${tMax}<span class="w-stat-unit">°</span></div></div>
+        <div class="w-stat"><div class="w-stat-label">최저</div><div class="w-stat-val">${tMin}<span class="w-stat-unit">°</span></div></div>
+        <div class="w-stat"><div class="w-stat-label">강수</div><div class="w-stat-val">${rain}<span class="w-stat-unit">%</span></div></div>
       </div>
-      <div class="weather-stats weather-stats-row2">
-        <div class="stat"><div class="stat-label">습도</div><div class="stat-value">${c.relative_humidity_2m}<span class="stat-unit">%</span></div></div>
-        <div class="stat"><div class="stat-label">풍속</div><div class="stat-value">${c.wind_speed_10m}<span class="stat-unit">km/h</span></div></div>
-        <div class="stat"><div class="stat-label">우산</div><div class="stat-value" style="font-size:28px">${rain>50?"☂️":"✅"}</div></div>
+      <div class="w-stats">
+        <div class="w-stat"><div class="w-stat-label">습도</div><div class="w-stat-val">${c.relative_humidity_2m}<span class="w-stat-unit">%</span></div></div>
+        <div class="w-stat"><div class="w-stat-label">풍속</div><div class="w-stat-val">${c.wind_speed_10m}<span class="w-stat-unit">km</span></div></div>
+        <div class="w-stat"><div class="w-stat-label">우산</div><div class="w-stat-val">${rain>50?"☂️":"✅"}</div></div>
       </div>
-      <div class="weather-bar-wrap">
-        <div class="bar-labels"><span>최저 ${tMin}°</span><span>현재 ${c.temperature_2m}°</span><span>최고 ${tMax}°</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:${fillPct}%"></div></div>
+      <div class="w-bar-wrap">
+        <div class="w-bar-labels"><span>${tMin}° 최저</span><span>${c.temperature_2m}° 현재</span><span>${tMax}° 최고</span></div>
+        <div class="w-bar-track"><div class="w-bar-fill" style="width:${fillPct}%"></div></div>
       </div>
-      <div class="hourly-wrap">
-        <div class="hourly-label">시간대별 기온 — 서울</div>
+      <div class="w-hourly">
+        <div class="w-hourly-label">시간대별 기온</div>
         <div style="overflow-x:auto">
-          <svg width="${W}" height="${H+20}" viewBox="0 0 ${W} ${H+20}" xmlns="http://www.w3.org/2000/svg" style="display:block" role="img" aria-label="시간대별 기온 차트">
-            <defs>
-              <linearGradient id="wg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#3d8bff" stop-opacity="0.2"/>
-                <stop offset="100%" stop-color="#3d8bff" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
+          <svg width="${W}" height="${H+22}" viewBox="0 0 ${W} ${H+22}" xmlns="http://www.w3.org/2000/svg" style="display:block" role="img" aria-label="시간대별 기온 차트">
+            <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1565ef" stop-opacity="0.15"/><stop offset="100%" stop-color="#1565ef" stop-opacity="0"/></linearGradient></defs>
             <path d="${areaD}" fill="url(#wg)"/>
-            <path d="${pathD}" fill="none" stroke="#3d8bff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-            ${svgDots}
+            <path d="${pathD}" fill="none" stroke="#1565ef" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            ${dots}
           </svg>
         </div>
       </div>`;
     setBadge("weather","done");
     document.getElementById("ref-weather").style.display="inline-block";
-  }catch(e){
+  }catch{
     document.getElementById("weather-content").innerHTML="<div class='placeholder' style='color:#c62828'>날씨 정보를 불러오지 못했어요.</div>";
-    setBadge("weather","err");
-    document.getElementById("ref-weather").style.display="inline-block";
+    setBadge("weather","err");document.getElementById("ref-weather").style.display="inline-block";
   }
 }
 
-/* ── RSS ── */
 async function fetchRSS(url){
-  for(const makeProxy of PROXIES){
+  for(const mk of PROXIES){
     try{
-      const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(),8000);
-      const r=await fetch(makeProxy(url),{signal:ctrl.signal});
-      clearTimeout(t);
+      const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),8000);
+      const r=await fetch(mk(url),{signal:ctrl.signal});clearTimeout(t);
       if(!r.ok) continue;
-      let xmlStr;
-      const ct=r.headers.get("content-type")||"";
-      if(ct.includes("json")){const j=await r.json();xmlStr=j.contents||"";}
-      else xmlStr=await r.text();
-      if(!xmlStr) continue;
-      const xml=new DOMParser().parseFromString(xmlStr,"text/xml");
-      const items=[...xml.querySelectorAll("item")];
+      let xml;const ct=r.headers.get("content-type")||"";
+      if(ct.includes("json")){const j=await r.json();xml=j.contents||"";}else xml=await r.text();
+      if(!xml) continue;
+      const doc=new DOMParser().parseFromString(xml,"text/xml");
+      const items=[...doc.querySelectorAll("item")];
       if(items.length) return items;
     }catch{continue;}
   }
-  throw new Error("All proxies failed");
+  throw new Error("fail");
 }
 
 async function fetchNews(key,emoji,grad,max=4){
-  setBadge(key,"loading");
-  document.getElementById("ref-"+key).style.display="none";
+  setBadge(key,"loading");document.getElementById("ref-"+key).style.display="none";
   try{
-    const items=(await fetchRSS(RSS_URLS[key])).slice(0,max);
-    if(!items.length) throw new Error("empty");
-
-    const DOMAIN_MAP={"한겨레":"hani.co.kr","조선일보":"chosun.com","중앙일보":"joongang.co.kr","연합뉴스":"yna.co.kr","경향신문":"khan.co.kr","동아일보":"donga.com","매일경제":"mk.co.kr","한국경제":"hankyung.com","뉴스1":"news1.kr","오마이뉴스":"ohmynews.com","SBS":"sbs.co.kr","KBS":"kbs.co.kr","MBC":"imnews.imbc.com","JTBC":"jtbc.co.kr","YTN":"ytn.co.kr","문화일보":"munhwa.com","서울신문":"seoul.co.kr","국민일보":"kmib.co.kr","세계일보":"segye.com","파이낸셜뉴스":"fnnews.com","머니투데이":"mt.co.kr","헤럴드경제":"heraldcorp.com","아시아경제":"asiae.co.kr","이데일리":"edaily.co.kr","대한민국 정책브리핑":"korea.kr"};
-
+    const items=(await fetchRSS(RSS_URLS[key])).slice(0,max);if(!items.length) throw 0;
+    const DM={"한겨레":"hani.co.kr","조선일보":"chosun.com","중앙일보":"joongang.co.kr","연합뉴스":"yna.co.kr","경향신문":"khan.co.kr","동아일보":"donga.com","매일경제":"mk.co.kr","한국경제":"hankyung.com","뉴스1":"news1.kr","SBS":"sbs.co.kr","KBS":"kbs.co.kr","MBC":"imnews.imbc.com","JTBC":"jtbc.co.kr","YTN":"ytn.co.kr","머니투데이":"mt.co.kr","헤럴드경제":"heraldcorp.com","아시아경제":"asiae.co.kr","이데일리":"edaily.co.kr","파이낸셜뉴스":"fnnews.com"};
     const cards=items.map(item=>{
       let title=item.querySelector("title")?.textContent||"";
       const link=item.querySelector("link")?.textContent||"#";
@@ -289,39 +260,32 @@ async function fetchNews(key,emoji,grad,max=4){
       const srcName=(title.match(/ - (.+)$/)??[])[1]||"";
       title=title.replace(/ - .+$/,"").trim();
       const date=pub?new Date(pub).toLocaleDateString("ko-KR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"";
-      const sourceEl=item.querySelector("source");
-      const sourceUrl=sourceEl?.getAttribute("url")||"";
-      let domain="";
-      try{domain=new URL(sourceUrl).hostname.replace("www.","");}catch{}
-      if(!domain&&srcName) domain=DOMAIN_MAP[srcName]||"";
-      const fav=domain?`https://www.google.com/s2/favicons?domain=${domain}&sz=128`:"";
+      const srcEl=item.querySelector("source");const srcUrl=srcEl?.getAttribute("url")||"";
+      let dom="";try{dom=new URL(srcUrl).hostname.replace("www.","");}catch{}
+      if(!dom&&srcName) dom=DM[srcName]||"";
+      const fav=dom?`https://www.google.com/s2/favicons?domain=${dom}&sz=128`:"";
       return `<a class="news-card" href="${esc(link)}" target="_blank" rel="noopener">
         <div class="news-thumb" style="background:${grad}">
-          ${fav
-            ?`<img class="thumb-favicon-img" src="${esc(fav)}" alt="${esc(srcName)}" onerror="this.outerHTML='<span class=\\"thumb-emoji-fallback\\">${emoji}</span>'">`
-            :`<span class="thumb-emoji-fallback">${emoji}</span>`}
+          ${fav?`<img class="thumb-favicon-img" src="${esc(fav)}" alt="${esc(srcName)}" onerror="this.outerHTML='<span class=\\"thumb-emoji-fallback\\">${emoji}</span>'">`:`<span class="thumb-emoji-fallback">${emoji}</span>`}
         </div>
-        <div class="news-card-body">
-          <div class="news-src">${fav?`<img class="src-ico" src="${esc(fav)}" alt="" onerror="this.style.display='none'">`:""}${esc(srcName||domain||"뉴스")}</div>
+        <div class="news-body">
+          <div class="news-src">${fav?`<img class="src-ico" src="${esc(fav)}" alt="" onerror="this.style.display='none'">`:""}${esc(srcName||dom||"뉴스")}</div>
           <div class="news-title">${esc(title)}</div>
           <div class="news-date">${esc(date)}</div>
-        </div>
-      </a>`;
+        </div></a>`;
     }).join("");
     document.getElementById("content-"+key).innerHTML=`<div class="news-grid">${cards}</div>`;
-    setBadge(key,"done");
-    document.getElementById("ref-"+key).style.display="inline-block";
+    setBadge(key,"done");document.getElementById("ref-"+key).style.display="inline-block";
   }catch{
     document.getElementById("content-"+key).innerHTML="<div class='placeholder' style='color:#c62828'>불러오기 실패. 새로고침을 눌러보세요.</div>";
-    setBadge(key,"err");
-    document.getElementById("ref-"+key).style.display="inline-block";
+    setBadge(key,"err");document.getElementById("ref-"+key).style.display="inline-block";
   }
 }
 
-function setBadge(key,type){
-  const b=document.getElementById("badge-"+key);
-  if(type==="loading"){b.className="badge loading-badge";b.innerHTML=`<span class="loader"></span>로딩 중`;}
-  else if(type==="done"){b.className="badge done";b.textContent="완료";}
+function setBadge(k,t){
+  const b=document.getElementById("badge-"+k);
+  if(t==="loading"){b.className="badge loading-badge";b.innerHTML=`<span class="loader"></span>로딩 중`;}
+  else if(t==="done"){b.className="badge done";b.textContent="완료";}
   else{b.className="badge err";b.textContent="오류";}
 }
 
@@ -329,7 +293,7 @@ async function fetchAll(){
   const btn=document.getElementById("btnAll");
   btn.disabled=true;btn.innerHTML=`<span class="loader"></span>브리핑 수신 중...`;
   await Promise.all([fetchWeather(),...NEWS_SECTIONS.map(s=>fetchNews(s.key,s.emoji,s.grad))]);
-  btn.disabled=false;btn.innerHTML=`<span class="btn-pulse"></span>새로고침`;
+  btn.disabled=false;btn.innerHTML=`<span class="btn-dot"></span>새로고침`;
 }
 </script>
 </body>
